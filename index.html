@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOUBHIK. | Visuals</title>
+    <style>
+        /* --- CORE VARIABLES --- */
+        :root {
+            --bg-main: #0a0a0a;
+            --bg-card: #141414;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent: #ff4757; /* A subtle red/pink accent */
+            --glass: rgba(20, 20, 20, 0.85);
+            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --radius: 0px; /* Sharp edges for extreme minimalism */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 4rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            background: linear-gradient(to bottom, #0a0a0add 0%, transparent 100%);
+        }
+
+        .brand {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .brand span {
+            color: var(--accent);
+        }
+
+        .brand::after {
+            content: 'CURATED';
+            position: absolute;
+            font-size: 0.5rem;
+            letter-spacing: 3px;
+            top: -10px;
+            left: 2px;
+            color: var(--text-secondary);
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        /* --- SEARCH BAR --- */
+        .search-container {
+            position: relative;
+        }
+
+        #searchInput {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--text-secondary);
+            color: var(--text-primary);
+            padding: 8px 0;
+            width: 200px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-bottom-color: var(--accent);
+            width: 300px;
+        }
+
+        /* --- HERO SECTION --- */
+        header.hero {
+            height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 4rem;
+            margin-top: 60px;
+        }
+
+        h1.hero-title {
+            font-size: 5vw;
+            line-height: 1;
+            font-weight: 800;
+            letter-spacing: -2px;
+            color: #222; /* Very subtle text */
+            text-transform: uppercase;
+            user-select: none;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            max-width: 500px;
+        }
+
+        .highlight-name {
+            color: var(--text-primary);
+            font-weight: 600;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        /* --- CATEGORY TABS --- */
+        .categories {
+            padding: 0 4rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+        }
+
+        .cat-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 5px;
+            transition: 0.3s;
+        }
+
+        .cat-btn:hover, .cat-btn.active {
+            color: var(--text-primary);
+        }
+
+        /* --- WALLPAPER GRID --- */
+        .grid-container {
+            padding: 0 4rem 4rem 4rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            aspect-ratio: 2/3;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+            opacity: 0.9;
+        }
+
+        .card:hover img {
+            transform: scale(1.05);
+            opacity: 1;
+        }
+
+        .card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .photographer {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* --- MODAL --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-img {
+            max-height: 85vh;
+            max-width: 90vw;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .download-btn {
+            position: absolute;
+            bottom: 30px;
+            background: var(--text-primary);
+            color: var(--bg-main);
+            padding: 12px 30px;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .download-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* --- API KEY INPUT (Settings) --- */
+        #apiSettings {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.7rem;
+            color: #444;
+            cursor: pointer;
+        }
+        
+        .api-input-box {
+            display: none;
+            position: fixed;
+            bottom: 50px;
+            right: 20px;
+            background: #222;
+            padding: 15px;
+            border: 1px solid #333;
+        }
+
+        .api-input-box.show { display: block; }
+        
+        .api-input-box input {
+            background: #111;
+            border: 1px solid #333;
+            color: white;
+            padding: 5px;
+            width: 200px;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media(max-width: 768px) {
+            nav, .grid-container, .categories, header.hero { padding-left: 1.5rem; padding-right: 1.5rem; }
+            .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+            h1.hero-title { font-size: 3rem; }
+            #searchInput { width: 120px; }
+            #searchInput:focus { width: 180px; }
+        }
+
+        footer {
+            text-align: center;
+            padding: 4rem 0;
+            color: #333;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="brand" onclick="resetHome()">SOUBHIK<span>.</span></div>
+        <div class="nav-controls">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search visuals...">
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1 class="hero-title">Minimalist<br>Perspective</h1>
+        <p class="hero-subtitle">
+            A digital collection curated by <span class="highlight-name">Soubhik</span>. <br>
+            Powered by the Unsplash Engine.
+        </p>
+    </header>
+
+    <div class="categories">
+        <button class="cat-btn active" onclick="loadCategory('minimal')">Minimal</button>
+        <button class="cat-btn" onclick="loadCategory('architecture')">Architecture</button>
+        <button class="cat-btn" onclick="loadCategory('dark')">Dark</button>
+        <button class="cat-btn" onclick="loadCategory('technology')">Tech</button>
+        <button class="cat-btn" onclick="loadCategory('neon')">Neon</button>
+    </div>
+
+    <main class="grid-container">
+        <div class="grid" id="grid">
+            </div>
+        <div id="statusMsg" style="text-align: center; margin-top: 20px; color: #555; font-size: 0.8rem;"></div>
+    </main>
+
+    <div class="modal" id="modal">
+        <button class="close-modal" onclick="closeModal()">&times;</button>
+        <img src="" class="modal-img" id="modalImg">
+        <a href="#" class="download-btn" id="dlBtn" target="_blank" download>Download Wallpaper</a>
+    </div>
+
+    <div id="apiSettings" onclick="toggleApiBox()">API Settings</div>
+    <div class="api-input-box" id="apiBox">
+        <p style="color:#aaa; margin-bottom:5px;">Enter Unsplash Access Key:</p>
+        <input type="text" id="userKey" placeholder="Paste Key & Press Enter">
+        <p style="color:#555; font-size: 0.6rem; margin-top: 5px;">Leave empty to use Demo Mode</p>
+    </div>
+
+    <footer>
+        DESIGNED BY SOUBHIK &copy; <span id="year"></span>
+    </footer>
+
+    <script>
+        // --- CONFIG & STATE ---
+        let ACCESS_KEY = ''; // User supplies this
+        const GRID = document.getElementById('grid');
+        const STATUS = document.getElementById('statusMsg');
+        
+        // --- DEMO DATA (Fallback if no API Key is provided) ---
+        // High quality manual selection to ensure the site looks good immediately
+        const DEMO_DATA = [
+            { id: 1, urls: { regular: 'https://images.unsplash.com/photo-1487147264018-f937fba0c817?q=80&w=1000' }, user: { name: 'Demo Artist 1' }, description: 'Minimalist' },
+            { id: 2, urls: { regular: 'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?q=80&w=1000' }, user: { name: 'Demo Artist 2' }, description: 'White' },
+            { id: 3, urls: { regular: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000' }, user: { name: 'Demo Artist 3' }, description: 'Abstract' },
+            { id: 4, urls: { regular: 'https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=1000' }, user: { name: 'Soubhik Pick' }, description: 'Dark' },
+            { id: 5, urls: { regular: 'https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?q=80&w=1000' }, user: { name: 'Rain' }, description: 'Storm' },
+            { id: 6, urls: { regular: 'https://images.unsplash.com/photo-1515462277126-2dd0c162007a?q=80&w=1000' }, user: { name: 'Neon' }, description: 'Retro' },
+            { id: 7, urls: { regular: 'https://images.unsplash.com/photo-1526749837599-b4eba9fd855e?q=80&w=1000' }, user: { name: 'Nature' }, description: 'Leaves' },
+            { id: 8, urls: { regular: 'https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=1000' }, user: { name: 'Fluid' }, description: '3D' },
+        ];
+
+        // --- FUNCTIONS ---
+
+        async function fetchImages(query) {
+            GRID.innerHTML = '<div style="color:#fff; padding:20px;">Searching Soubhik\'s database...</div>';
+            
+            // Check if we have a key, otherwise use demo mode
+            if(!ACCESS_KEY) {
+                console.log("No API Key. Using Demo Data.");
+                renderImages(DEMO_DATA);
+                STATUS.innerText = "Viewing Demo Collection. Add Unsplash API Key in bottom right for Live Search.";
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://api.unsplash.com/search/photos?page=1&query=${query}&per_page=12&orientation=portrait&client_id=${ACCESS_KEY}`);
+                
+                if (!response.ok) {
+                    if(response.status === 401) throw new Error("Invalid API Key");
+                    if(response.status === 403) throw new Error("Rate Limit Exceeded");
+                    throw new Error("Network Error");
+                }
+
+                const data = await response.json();
+                
+                if(data.results.length === 0) {
+                    GRID.innerHTML = '<div style="color:#888;">No visuals found.</div>';
+                    return;
+                }
+
+                renderImages(data.results);
+                STATUS.innerText = `Live Results for "${query}"`;
+
+            } catch (error) {
+                console.error(error);
+                STATUS.innerText = "Error: " + error.message + ". Reverting to Demo Mode.";
+                renderImages(DEMO_DATA);
+            }
+        }
+
+        function renderImages(images) {
+            GRID.innerHTML = '';
+            
+            images.forEach((img, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.animation = `fadeIn 0.5s ease forwards ${index * 0.1}s`;
+                card.style.opacity = '0'; // For animation
+
+                card.innerHTML = `
+                    <img src="${img.urls.regular}" alt="${img.alt_description || 'Wallpaper'}" loading="lazy">
+                    <div class="card-overlay">
+                        <div class="photographer">${img.user.name}</div>
+                    </div>
+                `;
+
+                // Handle High Res Download Link (Unsplash requires Raw usually, using Regular for demo speed)
+                const downloadLink = img.urls.full || img.urls.regular;
+                card.onclick = () => openModal(downloadLink);
+
+                GRID.appendChild(card);
+            });
+            
+            // Add Animation Keyframes dynamically if needed, or rely on CSS transitions
+            const style = document.createElement('style');
+            style.innerHTML = `@keyframes fadeIn { to { opacity: 1; } }`;
+            document.head.appendChild(style);
+        }
+
+        // --- INTERACTION ---
+
+        function loadCategory(cat) {
+            // Update active button
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Fetch
+            fetchImages(cat);
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                fetchImages(searchInput.value);
+            }
+        });
+
+        // Modal Logic
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modalImg');
+        const dlBtn = document.getElementById('dlBtn');
+
+        function openModal(src) {
+            modal.style.display = 'flex';
+            modalImg.src = src;
+            dlBtn.href = src;
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            modalImg.src = '';
+        }
+        
+        // Close modal on outside click
+        modal.addEventListener('click', (e) => {
+            if(e.target === modal) closeModal();
+        })
+
+        // API Key Settings
+        function toggleApiBox() {
+            document.getElementById('apiBox').classList.toggle('show');
+        }
+
+        const userKeyInput = document.getElementById('userKey');
+        userKeyInput.addEventListener('keypress', function(e) {
+            if(e.key === 'Enter') {
+                ACCESS_KEY = userKeyInput.value.trim();
+                document.getElementById('apiBox').classList.remove('show');
+                STATUS.innerText = "API Key Updated. Refreshing...";
+                fetchImages('minimal'); // Refresh with new key
+            }
+        });
+
+        function resetHome() {
+            loadCategory('minimal');
+        }
+
+        // Initialize Date
+        document.getElementById('year').innerText = new Date().getFullYear();
+
+        // Initial Load
+        fetchImages('minimal');
+
+    </script>
+</body>
+</html>
